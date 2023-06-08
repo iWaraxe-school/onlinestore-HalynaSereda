@@ -65,3 +65,7 @@ understand git principals and main git commands.
 - Change something in this newly created branch. For example, add a couple of lines into README.md file, or add a new file, or delete existing one.
 - Create a pull request from your branch to main branch, and assign it to your trainer. 
 Do not merge it yourself!
+
+
+Lets get it started!
+Java for QA Automation
