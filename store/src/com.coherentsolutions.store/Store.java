@@ -1,5 +1,8 @@
-}public class Store {
+public class Store {
 
-    private List<Category> categoryList;
+    private final List<Category> Categories;
+
+    public Store () {
+        this.Categories = new ArrayList<>();}
 
     }
