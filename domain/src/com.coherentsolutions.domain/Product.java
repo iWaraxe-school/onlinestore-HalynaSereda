@@ -1,8 +1,10 @@
+package com.coherentsolutions.domain;
+
 public class Product {
 
-    private String name;
-    private int rate;
-    private double price;
+    public final String name;
+    public int rate;
+    public double price;
 
     public Product(String name, int rate, double price) {
         this.name = name;

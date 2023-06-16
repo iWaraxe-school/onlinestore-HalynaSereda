@@ -4,8 +4,9 @@ import com.coherentsolutions.domain.Categories;
 
 public class BookCategory extends Categories {
 
-    public BookCategory (){
-        super(Categories.BOOK);
+
+public BookCategory (){
+       super (Categories.BOOK);
     }
 
 }
