@@ -1,8 +1,12 @@
+package com.coherentsolutions.store;
+
 public class Store {
 
-    private final List<Category> Categories;
+    private final List<Category> categories;
 
     public Store () {
-        this.Categories = new ArrayList<>();}
+        this.categories = new ArrayList<>();
+    }
+
 
     }
