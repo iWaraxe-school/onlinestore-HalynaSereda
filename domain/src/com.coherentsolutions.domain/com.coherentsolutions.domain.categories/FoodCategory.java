@@ -1,11 +1,12 @@
 package com.coherentsolutions.domain.com.coherentsolutions.domain.categories;
 
 import com.coherentsolutions.domain.Categories;
+import com.coherentsolutions.domain.Category;
 
-public class FoodCategory extends Categories {
+public class FoodCategory extends Category {
 
     public FoodCategory (){
-        super(Categories.FOOD);
+        super(String.valueOf(Categories.FOOD));
     }
 
 }

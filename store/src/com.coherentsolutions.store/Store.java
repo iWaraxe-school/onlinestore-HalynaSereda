@@ -1,16 +1,13 @@
 package com.coherentsolutions.store;
-import com.coherentsolutions.domain.Product;
+import com.coherentsolutions.domain.Category;
 
-import com.coherentsolutions.domain.Categories;
 import java.util.List;
 import java.util.ArrayList;
 public class Store {
 
-    private final List<Categories> categoriesList;
+    private final List<Category> categoryList;
 
     public Store () {
-        this.categoriesList = new ArrayList<Categories>();
+        this.categoryList = new ArrayList<Category>();
     }
-
-
     }
