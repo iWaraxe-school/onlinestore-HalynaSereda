@@ -10,4 +10,10 @@ public class Store {
     public Store () {
         this.categoryList = new ArrayList<Category>();
     }
+
+    public List<Category> getCategoryList() {
+        return categoryList;}
+    public void addCategoryToList(Category category) {
+        categoryList.add(category);
+    }
     }
