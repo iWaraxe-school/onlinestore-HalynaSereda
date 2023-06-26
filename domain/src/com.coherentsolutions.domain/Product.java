@@ -32,4 +32,9 @@ public class Product {
     public void setRate(Double rate) {
         this.rate = rate;
     }
+
+    public  FakerProduct {
+    String fp = name + rate +price;
+
+    }
 }
