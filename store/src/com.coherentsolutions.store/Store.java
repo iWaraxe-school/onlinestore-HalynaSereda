@@ -1,30 +1,28 @@
 package com.coherentsolutions.store;
 import com.coherentsolutions.domain.Category;
+import java.util.*;
 
-import java.util.List;
-import java.util.ArrayList;
-import  java.util.HashSet;
-import java.util.Set;
 public class Store {
 
     private final List<Category> categoryList;
+    private final Set<String> categoryNames;
 
-    public Store () {
-        this.categoryList = new ArrayList<Category>();
+    public Store() {
+        this.categoryList = new ArrayList<>();
+        this.categoryNames = new HashSet<>();
     }
 
     public List<Category> getCategoryList() {
-        return categoryList;}
+        return categoryList;
+    }
+
     public void addCategoryToList(Category category) {
-        categoryList.add(category);
-        String[] category1 = new String[]{};
-        Set<String> set = new HashSet<String>();
-        for (String element : category1) {
-            if (!set.add(element)) {}
-        }
         if (category == null) {
-            System.out.println("Category can not be null " );
+            throw new IllegalArgumentException("Category cannot be null");
         }
+        if (!categoryNames.add(category.getName())) {
+            throw new IllegalArgumentException("Category already exists");
+        }
+        categoryList.add(category);
     }
 }
-

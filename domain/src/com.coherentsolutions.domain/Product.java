@@ -33,8 +33,6 @@ public class Product {
         this.rate = rate;
     }
 
-    public  FakerProduct {
-    String fp = name + rate +price;
 
     }
-}
+
