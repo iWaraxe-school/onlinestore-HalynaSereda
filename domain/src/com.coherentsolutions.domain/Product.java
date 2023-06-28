@@ -32,4 +32,7 @@ public class Product {
     public void setRate(Double rate) {
         this.rate = rate;
     }
-}
+
+
+    }
+

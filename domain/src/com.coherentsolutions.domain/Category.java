@@ -10,4 +10,8 @@ public class Category {
         this.name = name;
         this.productList = new ArrayList<Product>();
     }
+
+    public String getName() {
+        return name;
+    }
 }
