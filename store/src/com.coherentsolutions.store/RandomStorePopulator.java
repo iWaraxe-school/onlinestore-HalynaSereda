@@ -21,5 +21,6 @@ public class RandomStorePopulator {
             default:
                 throw new IllegalArgumentException("No such category");
         }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.coherentsolutions.domain;
 
+
 public class Product {
 
     public String name;
@@ -33,6 +34,10 @@ public class Product {
         this.rate = rate;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Name: '%s', Price: '%s', Rate: '%s'", name, price, rate);}
 
-    }
+}
+
 
