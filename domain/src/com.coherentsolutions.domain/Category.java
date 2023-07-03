@@ -11,7 +11,12 @@ public class Category {
         this.productList = new ArrayList<Product>();
     }
 
+
+
     public String getName() {
         return name;
+    }
+
+    public void setAccessible(boolean b) {
     }
 }
