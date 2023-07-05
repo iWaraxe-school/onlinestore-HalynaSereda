@@ -25,4 +25,8 @@ public class Store {
         }
         categoryList.add(category);
     }
+
+
+    public void addCategory(Category category) {
+    }
 }

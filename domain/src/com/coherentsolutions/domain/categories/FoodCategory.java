@@ -6,7 +6,7 @@ import com.coherentsolutions.domain.Category;
 public class FoodCategory extends Category {
 
     public FoodCategory (){
-        super(String.valueOf(Categories.FOOD));
+        super(Categories.FOOD);
     }
 
 }

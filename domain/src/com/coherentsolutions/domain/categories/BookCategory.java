@@ -5,9 +5,9 @@ import com.coherentsolutions.domain.Category;
 
 public class BookCategory extends Category {
 
-
 public BookCategory (){
-       super (String.valueOf(Categories.BOOK));
-    }
+       super (Categories.BOOK);
 
+
+      }
 }
