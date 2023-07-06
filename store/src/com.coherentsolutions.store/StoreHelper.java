@@ -16,8 +16,8 @@ public class StoreHelper  {
     }
 
     private void createCategories() {
-        Reflections reflections = new Reflections("com.coherentsolutions.domain.categories");
-        Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);;
+        Reflections reflections = new Reflections("com.coherentsolutions.domain.Category");
+        Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);
 
         for (Class<? extends Category> subType : subTypes) {
             try {
@@ -43,7 +43,7 @@ public class StoreHelper  {
         for (Category category: store.getCategoryList()) {
             for (int i = 0; i < 10; i++) {
                Product product = generator.generateProduct(category.getName());
-               category.addProductToCatedory(product);
+               category.addProductToCategory(product);
 
             }
         }

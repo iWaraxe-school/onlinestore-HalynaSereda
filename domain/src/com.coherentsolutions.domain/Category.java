@@ -19,6 +19,7 @@ public class Category {
 
 
 
-    public void addProductToCatedory(Product product) {
+    public void addProductToCategory(Product product) {
+        productList.add(product);
     }
 }
