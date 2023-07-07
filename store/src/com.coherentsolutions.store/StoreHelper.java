@@ -28,7 +28,7 @@ public class StoreHelper  {
                 }
 
                 Category category = constructor.newInstance();
-                store.addCategory(category);
+                store.addCategoryToList(category);
 
             } catch (InvocationTargetException | NullPointerException | IllegalAccessException | NoSuchMethodException e) {
                 e.printStackTrace();
