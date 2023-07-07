@@ -16,7 +16,7 @@ public class StoreHelper  {
     }
 
     private void createCategories() {
-        Reflections reflections = new Reflections("com.coherentsolutions.domain.Category");
+        Reflections reflections = new Reflections("com.coherentsolutions.domain.categories");
         Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);
 
         for (Class<? extends Category> subType : subTypes) {

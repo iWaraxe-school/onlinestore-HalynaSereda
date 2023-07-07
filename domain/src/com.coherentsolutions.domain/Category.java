@@ -1,7 +1,7 @@
 package com.coherentsolutions.domain;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 public class Category {
     private final Categories name;
     private final List<Product> productList;

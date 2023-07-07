@@ -21,7 +21,6 @@ public class Store {
     }
 
 
-
     @Override
     public String toString() {
         StringBuilder storeStr = new StringBuilder("Store: \n");
