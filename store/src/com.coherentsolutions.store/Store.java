@@ -17,16 +17,17 @@ public class Store {
     }
 
     public void addCategoryToList(Category category) {
-        if (category == null) {
-            throw new IllegalArgumentException("Category cannot be null");
-        }
-        if (!categoryNames.add(category.getName())) {
-            throw new IllegalArgumentException("Category already exists");
-        }
         categoryList.add(category);
     }
 
 
-    public void addCategory(Category category) {
+
+    @Override
+    public String toString() {
+        StringBuilder storeStr = new StringBuilder("Store: \n");
+        for(Category category : categoryList) {
+            storeStr.append(category.toString()).append("\n");
+        }
+        return storeStr.toString();
     }
 }

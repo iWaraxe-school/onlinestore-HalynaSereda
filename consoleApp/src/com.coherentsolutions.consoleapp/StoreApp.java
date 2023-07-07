@@ -9,5 +9,5 @@ public class StoreApp {
         StoreHelper storeHelper = new StoreHelper(onlineStore);
         storeHelper.fillStore();
         System.out.println(onlineStore);
-           }
+    }
 }
