@@ -22,18 +22,15 @@ public class StoreHelper  {
         for (Class<? extends Category> subType : subTypes) {
             try {
                 Constructor<? extends Category> constructor = subType.getDeclaredConstructor();
-                if (!constructor.isAccessible()) {
+                if (!constructor.canAccess(null)) {
                     System.out.printf("Cannot access constructor of %s, it might be private%n", subType.getSimpleName());
                     continue;
                 }
 
                 Category category = constructor.newInstance();
                 store.addCategoryToList(category);
-
-            } catch (InvocationTargetException | NullPointerException | IllegalAccessException | NoSuchMethodException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
             }
         }
     }
