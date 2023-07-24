@@ -1,51 +1,50 @@
-# 2. Maven (RU)
-## Task #2
-Before starting the implementation of `OnlineStore,` we need to prepare the project structure and set up a dependency manager.
-We will use Maven’ to handle our project dependencies and source code build.
-Create a multi-module maven project in `IntelliJ Idea,` with such modules:
-1. OnlineStore (this is the parent module)
-2. domain
-3. store
-4. consoleApp
-### Useful links
-If you are unfamiliar with Maven, you can get your first impression of this build tool by visiting the following resources.
-Additional read
-- [Maven in 5 Minutes](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
-- [Maven Getting Started Guide](https://maven.apache.org/guides/getting-started/index.html)
-- [Naming Maven](http://maven.apache.org/guides/mini/guide-naming-conventions.html)
-- [Naming Java](https://www.oracle.com/java/technologies/javase/codeconventions-namingconventions.html)
-## Learning Materials
-If it’s still vague and unclear what to do, you’d better read a series of educational materials to help you better understand ’Maven’. Video lectures or, better to say, screencasts will show you what you have to do in detail.
-### Maven lectures (part1)
-#### 1.1. Installing maven
-Large programs Getting to know Maven Downloading and installing Maven Environment Variables Local Maven repository […](https://www.craft.do/s/nXFWzvhq7uns4v)
-#### 1.2. Creating a Maven project
-One of the things Maven has standardized on first is the project description. Before Maven, every IDE had its own project file that stored information about the project and its build (and often in binary form) […](https://www.craft.do/s/z9hEumrEVNB8eE)
-#### 1.3. Archetypes in Maven.
-There is another way to create a Maven project in IDEA - based on an archetype […](https://www.craft.do/s/b9scnE0IQ1cRVc)
-#### 1.4. Dependencies in a Maven project
-How to search for libraries in the Maven Repository dependencies repository […](https://www.craft.do/s/fhnUlNxM9k28fh)
-#### 1.5. Phases of a Maven project
-List of project phases Project assembly Work cycles […](https://www.craft.do/s/KmpgDcxHPMIX9A)
-#### 1.6. Maven plugins
-Getting to know plugins Lifecycle and plugins Goals in Maven - goals […](https://www.craft.do/s/A7nMFw1DN6PlCC)
-#### 1.7. Maven properties
-Variables in Maven - properties Predefined variables in Maven […](https://www.craft.do/s/fiWjasjnJ2dJax)
-#### 1.8. Building a Maven project
-The project’s structure is described in the pom.xml file, which must be located in the project’s root folder. The contents of the project file are as follows […](https://www.craft.do/s/Kig0GT6fYEj3HN)
-### Maven (part2)
-#### 2.1. Advanced Maven project build
-List of plugins to build in Maven Compilation plugin maven-compiler-plugin Build jar file maven-jar-plugin Generate buildnumber-maven-plugin plugin […](https://www.craft.do/s/ub3RIQ8ckTbyk6)
-#### 2.2. File management during the build of a Maven project
-Resource copying plugin maven-resources-plugin Resource filtering with maven-resources-plugin Source inclusion plugin maven-source-plugin Dependency copying plugin maven-dependency-plugin […](https://www.craft.do/s/rddAm3dbwGW3cv)
-#### 2.3. Building a war-project
-Differences between war and jar files. The maven-war-plugin to create a war file. Building a web application based on SpringBoot  […](https://www.craft.do/s/Qi2vUuJQqVsG7T)
-#### 2.4. Testing a Maven project at build time
-Testing in Maven. Test setup. How to quickly eliminate broken tests  […](https://www.craft.do/s/iIjURtPcg4SDC3)
-#### 2.5. Deploying a project with Maven
-Using maven-deploy-plugin. Deploying a web application in Tomcat using Maven. Deploying with the Cargo Plugin. Deploying with IntelliJ IDEA  […](https://www.craft.do/s/2bSi6vQyqTOZBz)
-#### 2.6. Useful Maven plugins
-Your own maven repository on GitHub. Package an assembly into a Docker image  […](https://www.craft.do/s/0dTWSblp2Quu6m)
-## Video Lectures
-1. [Maven Basics] (https://drive.google.com/file/d/1Vl4Zcz8iSx2HM41VOHlPs2VvYppkI769/view?usp=sharing) - Вasics of maven. How to add and manage dependencies, and how to create multimodular projects.
-2. [How to use GitHub Classroom] (https://drive.google.com/file/d/1XJdz2a37VsBvBEmMVYRjcHOAEc5QlNPi/view)   - Workflows with GitHub Classroom. Common mistakes.
+# 4. Collections
+## Materials
+- [Collections](https://docs.oracle.com/javase/tutorial/collections/index.html)
+- [Lecture 9](https://drive.google.com/file/d/13TibWYVYc8CaFVcLUMklHLrqkmS5Q6h\_/view?usp=sharing)
+- [XML](https://en.wikipedia.org/wiki/XML)
+- [XML processing](https://docs.oracle.com/javase/tutorial/jaxp/)
+
+## VideoLectures
+[Collections playlist](https://youtube.com/playlist?list=PL96uE92X-ozdXTE7PoMfFQJ2CBz-hv9YK)
+- [Collections, Lists, Sets, Unmodifiable Lists and Sets](https://youtu.be/boKGhpMjqUw)
+- [Lists, Sets, Maps, Unmodifiable Maps](https://youtu.be/48s7xoswhkE)
+- [Generics (part 1)](https://youtu.be/vT2I3LcLWJM)
+- [Generics (part 2)](https://youtu.be/9mwtYNzWUV0)
+- [Functional Interfaces, Introduction to lambdas](https://youtu.be/Fp2R6uY02o8)
+- [Lambdas](https://youtu.be/RQ30tUIppQU)
+- [Stream API](https://youtu.be/4coew\_omxRo)
+- [PrimitiveStream, Optional](https://youtu.be/KU6RbxTzTj0)
+
+## Task #4
+Starting extend our store. Please append ability user to interact with our store, while sending commands through read stream.
+Add support of such commands: 
+- `sort` - products from store according config. In resources folder create xml config file like
+```
+<sort>
+    <name>asc</name>
+    <price>asc</price>
+    <rate>desc</rate>
+</sort>
+```
+Config file can contains from 1 to N fields. Sort should be done using `Comparator`. Sort and print should not modify
+ default store product lists and their order.
+- `top` - print top 5 products of whole store sorted via price desc
+- `quit` - exit app
+
+++Read this file when you have difficulty, or even before.
+## Hints and FAQs
+### Where to put classes?
+It is best to place new classes that will deal with reading the XML file in a separate package. Possible classes that will need to be created are `XMLParser` which will read from the `config.xml` file, `Comparator` which will sort the contents of the list based on the contents of `config.xml`, it would be a good idea to add an `enum` class , which will contain the possible types of sorting.
+### Packages
+### Code in small chunks
+#### XML reader and parser (30%)
+The optimal structure that will store a **key-value** pair as **field - sort direction (`asc/desc`)** is `Map`. The important thing here is to use a kind of `Map` that remembers the order in which the `entries` are added.
+#### Comparator (40%)
+The key point is not to get hung up on the example presented in the condition, namely to implement only the sort order by `name`, `price` and `rate`. The order of the fields can be changed, there can be fewer, even one field!
+#### Methods of sorting Store (20%)
+Although we need to do two kinds of sorting: sorting the entire `Store` and finding the five most expensive items, this can actually be defined through the same `Comparator` that accepts different kinds of `Map`. For example, a descending sort by price can be obtained by passing `Map` to `Comparator`, which contains only one key-value pair: `price`-`desc`.
+#### Interaction with Store (10%)
+The usual endless `while` loop which waits for input from the console.
+### How then to work smoother and faster?
+We start in a new branch `04collection`, in which we will solve four tasks: XML parser, Comparator, Methods for store sorting, Interaction with Store. Accordingly, we will sequentially create four different branches: `04collection-XMLparser`, `04collection-Comparator`, `04collection-sorting`, `04collection-interaction`. At the end of each step, you need to create a `pull request` in `04collection`, not in `main`! 
