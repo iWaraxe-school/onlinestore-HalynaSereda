@@ -16,24 +16,21 @@ public class StoreHelper  {
     }
 
     private void createCategories() {
-        Reflections reflections = new Reflections("com.coherentsolutions.domain.Category");
+        Reflections reflections = new Reflections("com.coherentsolutions.domain.categories");
         Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);
 
         for (Class<? extends Category> subType : subTypes) {
             try {
                 Constructor<? extends Category> constructor = subType.getDeclaredConstructor();
-                if (!constructor.isAccessible()) {
+                if (!constructor.canAccess(null)) {
                     System.out.printf("Cannot access constructor of %s, it might be private%n", subType.getSimpleName());
                     continue;
                 }
 
                 Category category = constructor.newInstance();
-                store.addCategory(category);
-
-            } catch (InvocationTargetException | NullPointerException | IllegalAccessException | NoSuchMethodException e) {
+                store.addCategoryToList(category);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
             }
         }
     }
