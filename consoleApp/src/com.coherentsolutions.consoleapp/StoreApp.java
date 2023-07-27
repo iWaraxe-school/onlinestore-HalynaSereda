@@ -1,5 +1,6 @@
 package com.coherentsolutions.consoleapp;
 
+import com.coherentsolutions.XMLParser;
 import com.coherentsolutions.store.Store;
 import com.coherentsolutions.store.StoreHelper;
 
@@ -9,5 +10,6 @@ public class StoreApp {
         StoreHelper storeHelper = new StoreHelper(onlineStore);
         storeHelper.fillStore();
         System.out.println(onlineStore);
+        System.out.println(XMLParser.GetSortInOrder());
     }
 }
