@@ -1,6 +1,6 @@
 package com.coherentsolutions.consoleapp;
 
-import com.coherentsolutions.XMLParser;
+import com.coherentsolutions.xml.XMLParser;
 import com.coherentsolutions.store.Store;
 import com.coherentsolutions.store.StoreHelper;
 
