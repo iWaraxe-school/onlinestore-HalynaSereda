@@ -1,8 +1,10 @@
 package com.coherentsolutions.consoleapp;
 
-import com.coherentsolutions.xml.XMLParser;
 import com.coherentsolutions.store.Store;
 import com.coherentsolutions.store.StoreHelper;
+import com.coherentsolutions.xml.XMLParser;
+
+import java.util.Map;
 
 public class StoreApp {
     public static void main(String[] args) {
@@ -10,6 +12,8 @@ public class StoreApp {
         StoreHelper storeHelper = new StoreHelper(onlineStore);
         storeHelper.fillStore();
         System.out.println(onlineStore);
-        System.out.println(XMLParser.GetSortInOrder());
+        Map<String, String > sortMap = XMLParser.getSortInOrder();
+        System.out.println(sortMap);
+
     }
 }

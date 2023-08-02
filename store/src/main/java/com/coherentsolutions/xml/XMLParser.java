@@ -1,46 +1,51 @@
 package com.coherentsolutions.xml;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 public class XMLParser {
+    private static final String PATH = "store/src/main/resources/config.xml";
+    public static Map<String, String> getSortInOrder() throws RuntimeException {
 
-    public static LinkedHashMap<String, String> GetSortInOrder() throws RuntimeException {
-
-        LinkedHashMap<String, String> sortMap = new LinkedHashMap<>();
-        File xmlFile = new File("C:\\Users\\HalynaSereda\\IdeaProjects\\onlinestore-HalynaSereda\\store\\src\\main\\resources");
+            Map<String, String> sortMap = new LinkedHashMap<>();
 
         try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = documentBuilder.parse(xmlFile);
+            Document document = documentBuilder.parse(PATH);
             Element root=document.getDocumentElement();
             NodeList children=root.getChildNodes();
+
             for(int i=0;i<children.getLength();i++)
             {
                 Node child=children.item(i);
-                if (child instanceof Element)
+                if (child instanceof Element childElement)
+
                 {
-                    Element childElement=(Element) child;
-                    Text textNode=(Text)childElement.getFirstChild();
-                    String text =textNode.getData().trim();
-                    System.out.println(text);
+                    String key = childElement.getTagName();
+                   String value = childElement.getTextContent();
+                   sortMap.put(key, value);
 
                 }
 
-
-        }} catch (ParserConfigurationException e) {
+            }
+        } catch (ParserConfigurationException e) {
             throw new RuntimeException("Parsing error");
         } catch (IOException e) {
-            throw new RuntimeException("File" + xmlFile  + "not found");
+            throw new RuntimeException("Error while reading or accessing files, directories and streams");
         } catch (SAXException e) {
-            throw new RuntimeException( "A SAXException has occurred while reading the " + xmlFile );
+            throw new RuntimeException( "A SAXException has occurred while reading the " + PATH );
         }
-        return sortMap;
+
+            return sortMap;
     }}

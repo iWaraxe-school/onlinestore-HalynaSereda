@@ -1,4 +1,4 @@
 package com.coherentsolutions.sorting;
 
-public enum Sorting { acs, desc
+public enum Sorting { asc, desc
 }
