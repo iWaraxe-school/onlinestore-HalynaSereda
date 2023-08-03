@@ -1,6 +1,9 @@
 package com.coherentsolutions.store;
+
 import com.coherentsolutions.domain.Category;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Store {
 
@@ -29,4 +32,6 @@ public class Store {
         }
         return storeStr.toString();
     }
+
+
 }

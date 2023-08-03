@@ -16,14 +16,14 @@ public class Product {
         return name;
     }
 
-
     public double getPrice() {
         return price;
     }
 
     public double getRate() {
-        return (double) rate;
+        return rate;
     }
+
     public void setName(String name) {
         this.name = name;
     }
