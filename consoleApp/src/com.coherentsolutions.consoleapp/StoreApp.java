@@ -25,7 +25,6 @@ public class StoreApp {
             products.addAll(category.getProductList());
         }
 
-        // Main loop for user interaction
         while (true) {
             // Display menu options
             System.out.println("Select an option:");
@@ -39,7 +38,7 @@ public class StoreApp {
                     performSorting(scanner, products, sortingMap);
                     break;
                 case 2:
-                    displayTopFiveMostExpensiveItems(products);
+                    displayTopFiveMostExpensiveItems(products, 5);
                     break;
                 case 3:
                     System.out.println("Goodbye!");
@@ -50,39 +49,41 @@ public class StoreApp {
         }
     }
 
-    // Method to handle sorting based on user input
-    private static void performSorting(Scanner scanner, List<Product> products,
-                                       Map<String, Sorting> sortingMap) {
-        // Ask the user to choose a field for sorting
-        System.out.println("Choose a field for sorting:");
-        for (String fieldName : sortingMap.keySet()) {
-            System.out.println(fieldName);
-        }
-        String chosenField = scanner.next();
+    private static void performSorting(Scanner scanner, List<Product> products, Map<String, Sorting> sortingMap) {
+        while (true) {
+            // Ask the user to choose a field for sorting
+            System.out.println("Choose a field for sorting:");
+            for (String fieldName : sortingMap.keySet()) {
+                System.out.println(fieldName);
+            }
+            String chosenField = scanner.next();
 
-        // Check if the chosen field exists in the sortingMap
-        if (!sortingMap.containsKey(chosenField)) {
-            System.out.println("Invalid field choice.");
-            return;
-        }
+            // Check if the chosen field exists in the sortingMap
+            if (!sortingMap.containsKey(chosenField)) {
+                System.out.println("Invalid field choice. Please select a valid field.");
+                continue; // Go back to the beginning of the loop
+            }
 
-        // Get the sorting order from the sortingMap
-        Sorting sortingOrder = sortingMap.get(chosenField);
+            // Get the sorting order from the sortingMap
+            Sorting sortingOrder = sortingMap.get(chosenField);
 
-        // Create a StoreComparator with the chosen field and sorting order
-        StoreComparator storeComparator = new StoreComparator(chosenField, sortingOrder);
+            // Create a StoreComparator with the chosen field and sorting order
+            StoreComparator storeComparator = new StoreComparator(chosenField, sortingOrder);
 
-        // Sort products using storeComparator
-        Collections.sort(products, storeComparator);
+            // Sort products using storeComparator
+            Collections.sort(products, storeComparator);
 
-        // Display sorted products
-        for (Product product : products) {
-            System.out.println(product);
+            // Display sorted products
+            System.out.println("Products sorted by " + chosenField + " in " + sortingOrder + " order:");
+            for (Product product : products) {
+                System.out.println(product);
+            }
+
+            // Exit the loop after successfully sorting and displaying
+            break;
         }
     }
-
-    // Method to display the top 5 most expensive items
-    private static void displayTopFiveMostExpensiveItems(List<Product> products) {
+    private static void displayTopFiveMostExpensiveItems(List<Product> products, int topN) {
         // Create a StoreComparator for descending price sorting
         StoreComparator storeComparator = new StoreComparator("price", Sorting.DESC);
 
@@ -90,7 +91,7 @@ public class StoreApp {
         Collections.sort(products, storeComparator);
 
         // Display the top 5 most expensive items
-        int totalItems = Math.min(5, products.size());
+        int totalItems = Math.min(topN, products.size());
         List<Product> topItems = products.subList(0, totalItems);
 
         System.out.println("Top 5 most expensive items:");
