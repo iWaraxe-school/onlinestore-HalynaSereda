@@ -3,45 +3,36 @@ package com.coherentsolutions.sorting;
 
 import com.coherentsolutions.domain.Product;
 
-import java.util.Comparator;
-import java.util.Map;
-
+import java.util.*;
 
 
 public class StoreComparator implements Comparator<Product> {
-    Map<String, String> sortingMap;
-    public StoreComparator (Map<String, String> sortingMap)
-    {
-        this.sortingMap = sortingMap;
+    private String sortingField; // Field to be sorted (e.g., "name", "price", "rate")
+    private Sorting sortingOrder; // Sorting order (asc or desc)
+
+    public StoreComparator(String sortingField, Sorting sortingOrder) {
+        this.sortingField = sortingField;
+        this.sortingOrder = sortingOrder;
     }
+
     @Override
     public int compare(Product o1, Product o2) {
-        for (Map.Entry<String, String> entry : sortingMap.entrySet()) {
-            String sortOrder = entry.getValue();
-            String sortField = entry.getKey();
-            int result = sortByField (sortField, o1, o2);
-            if (result != 0 ) {
-                if (sortOrder.equals("asc")) {
-                    return result;
-                } else if (sortOrder.equals("desc")) {
-                    return result * -1;
-                }
-            }
-        }
-
-        return 0;
-    }
-
-    private int sortByField (String sortField, Product o1, Product o2) {
-        switch (sortField) {
+        int result;
+        switch (sortingField) {
             case "name":
-                return o2.getName().compareTo(o1.getName());
+                result = o1.getName().compareTo(o2.getName());
+                break;
             case "price":
-                return Double.compare(o1.getPrice(), o2.getPrice());
+                result = Double.compare(o1.getPrice(), o2.getPrice());
+                break;
             case "rate":
-                return Double.compare(o1.getRate(), o2.getRate());
-            default:  {
-                return 0;
-            }
+                result = Double.compare(o1.getRate(), o2.getRate());
+                break;
+            default:
+                result = 0;
+                break;
         }
-}}
+
+        return sortingOrder == Sorting.ASC ? result : -result; // Apply sorting order
+    }
+    }
