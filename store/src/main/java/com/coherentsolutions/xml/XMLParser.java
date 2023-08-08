@@ -38,11 +38,14 @@ public class XMLParser {
                 }
             }
         } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Parsing error");
+            throw new RuntimeException("Error while configuring the XML parser: " + e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Error while reading or accessing files, directories and streams");
+            throw new RuntimeException("Error while reading or accessing files: " + e.getMessage());
         } catch (SAXException e) {
-            throw new RuntimeException("A SAXException has occurred while reading the " + PATH);
+            throw new RuntimeException("Error in parsing the XML document: " + e.getMessage());
+        } catch (Exception e) {
+                // Handle any other unexpected exceptions
+            throw new RuntimeException("An unexpected error occurred: " + e.getMessage());
         }
 
         return sortMap; // Return the map of sorting orders
