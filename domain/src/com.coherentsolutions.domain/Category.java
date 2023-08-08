@@ -8,7 +8,7 @@ public class Category {
 
     public Category (Categories name){
         this.name = name;
-        this.productList = new ArrayList<Product>();
+        this.productList = new ArrayList<>();
     }
 
 
@@ -17,7 +17,9 @@ public class Category {
         return String.valueOf(name);
     }
 
-
+    public List<Product> getProductList() {
+        return productList;
+    }
 
     public void addProductToCategory(Product product) {
         productList.add(product);
@@ -30,4 +32,6 @@ public class Category {
         }
         return categoryStr.toString();
     }
+
+
 }

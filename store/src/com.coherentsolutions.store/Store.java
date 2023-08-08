@@ -1,15 +1,17 @@
 package com.coherentsolutions.store;
+
 import com.coherentsolutions.domain.Category;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Store {
 
     private final List<Category> categoryList;
-    private final Set<String> categoryNames;
 
     public Store() {
         this.categoryList = new ArrayList<>();
-        this.categoryNames = new HashSet<>();
+
     }
 
     public List<Category> getCategoryList() {
@@ -30,4 +32,6 @@ public class Store {
         }
         return storeStr.toString();
     }
+
+
 }
