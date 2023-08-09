@@ -38,7 +38,7 @@ public class StoreApp {
                     performSorting(scanner, products, sortingMap);
                     break;
                 case 2:
-                    displayTopFiveMostExpensiveItems(products, 5);
+                    displayTopNMostExpensiveItems(products, 5);
                     break;
                 case 3:
                     System.out.println("Goodbye!");
@@ -50,53 +50,52 @@ public class StoreApp {
     }
 
     private static void performSorting(Scanner scanner, List<Product> products, Map<String, Sorting> sortingMap) {
-        while (true) {
-            // Ask the user to choose a field for sorting
-            System.out.println("Choose a field for sorting:");
-            for (String fieldName : sortingMap.keySet()) {
-                System.out.println(fieldName);
-            }
-            String chosenField = scanner.next();
-
-            // Check if the chosen field exists in the sortingMap
-            if (!sortingMap.containsKey(chosenField)) {
-                System.out.println("Invalid field choice. Please select a valid field.");
-                continue; // Go back to the beginning of the loop
-            }
-
-            // Get the sorting order from the sortingMap
-            Sorting sortingOrder = sortingMap.get(chosenField);
-
-            // Create a StoreComparator with the chosen field and sorting order
-            StoreComparator storeComparator = new StoreComparator(chosenField, sortingOrder);
-
-            // Sort products using storeComparator
-            Collections.sort(products, storeComparator);
-
-            // Display sorted products
-            System.out.println("Products sorted by " + chosenField + " in " + sortingOrder + " order:");
-            for (Product product : products) {
-                System.out.println(product);
-            }
-
-            // Exit the loop after successfully sorting and displaying
-            break;
+        // Ask the user to choose a field for sorting
+        System.out.println("Choose a field for sorting:");
+        for (String fieldName : sortingMap.keySet()) {
+            System.out.println(fieldName);
         }
+        String chosenField = scanner.next();
+
+        // Check if the chosen field exists in the sortingMap
+        if (!sortingMap.containsKey(chosenField)) {
+            System.out.println("Invalid field choice.");
+            return;
+        }
+
+        // Get the sorting order from the sortingMap
+        Sorting sortingOrder = sortingMap.get(chosenField);
+
+        // Use the common method to sort and display products
+        sortAndDisplayProducts(products, chosenField, sortingOrder);
     }
-    private static void displayTopFiveMostExpensiveItems(List<Product> products, int topN) {
+
+    private static void displayTopNMostExpensiveItems(List<Product> products, int topN) {
         // Create a StoreComparator for descending price sorting
         StoreComparator storeComparator = new StoreComparator("price", Sorting.DESC);
 
         // Sort products using storeComparator
         Collections.sort(products, storeComparator);
 
-        // Display the top 5 most expensive items
+        // Display the top N most expensive items
         int totalItems = Math.min(topN, products.size());
         List<Product> topItems = products.subList(0, totalItems);
 
-        System.out.println("Top 5 most expensive items:");
+        System.out.println("Top " + topN + " most expensive items:");
         for (Product product : topItems) {
             System.out.println(product);
         }
     }
-}
+
+    private static void sortAndDisplayProducts(List<Product> products, String fieldName, Sorting sortingOrder) {
+        // Create a StoreComparator with the chosen field and sorting order
+        StoreComparator storeComparator = new StoreComparator(fieldName, sortingOrder);
+
+        // Sort products using storeComparator
+        Collections.sort(products, storeComparator);
+
+        // Display sorted products
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }}
