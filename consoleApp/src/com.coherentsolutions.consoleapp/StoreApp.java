@@ -14,7 +14,7 @@ public class StoreApp {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in); // Create a Scanner for user input
-        Store onlineStore = new Store();
+        Store onlineStore = Store.getInstance();
         StoreHelper storeHelper = new StoreHelper(onlineStore);
         storeHelper.fillStore();
 
