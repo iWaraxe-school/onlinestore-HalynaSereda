@@ -12,6 +12,7 @@
     <artifactId>domain</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
