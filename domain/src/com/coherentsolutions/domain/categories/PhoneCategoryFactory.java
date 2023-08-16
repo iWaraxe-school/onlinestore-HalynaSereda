@@ -6,6 +6,6 @@ import com.coherentsolutions.store.CategoryFactory;
 public class PhoneCategoryFactory implements CategoryFactory {
     @Override
     public Category createCategory() {
-        return new FoodCategory();
+        return new PhoneCategory();
     }
 }
