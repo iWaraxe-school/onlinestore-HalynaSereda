@@ -20,3 +20,10 @@ The application of patterns consists not only in their implementation, but also 
 - Justify why you chose this one and not another. What do you gain by using chosen Design Pattern?
 ## Hints
 Rethink your application from SOLID point of view. Keep in mind that in addition to implementing multithreading, we will also work with the database and http. In many ways, we will repeat what we did for the console application for both the database and the http layers. It might be worth coming up with some common interfaces that different versions will implement.
+
+
+ The Singleton pattern ensures that a class has only one instance and  can be accessed from anywhere in your application, thats why I used it for my Store class
+
+In Product class, using the Builder pattern simplifies object creation by breaking it down into manageable steps. Each step corresponds to setting a specific attribute or property of the object.  It makes my code clearer and more adaptable to changes over time.
+
+The Factory Method pattern allows to add new categories without modifying existing code. Factory Method pattern is suitable for categories because it promotes code modularity, separation of concerns, and future extensibility. It enables to manage category creation in a more structured and maintainable way, which is particularly valuable as your project evolves and new categories are introduced.
