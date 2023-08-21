@@ -22,6 +22,11 @@
             <artifactId>javafaker</artifactId>
             <version>1.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.domain-model</groupId>
+            <artifactId>domain-model</artifactId>
+            <version>0.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
