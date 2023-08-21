@@ -8,13 +8,26 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
+/**
+ * Helper class for populating the store with categories and products.
+ */
 public class StoreHelper  {
     private final Store store;
+
+    /**
+     * Constructs a StoreHelper instance with the provided store.
+     *
+     * @param store The store to populate with categories and products.
+     */
     public StoreHelper (Store store) {
         this.store = store;
         createCategories();
     }
 
+
+    /**
+     * Creates and adds categories to the store by using reflection.
+     */
     private void createCategories() {
         Reflections reflections = new Reflections("com.coherentsolutions.domain.categories");
         Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);
@@ -35,6 +48,10 @@ public class StoreHelper  {
         }
     }
 
+
+    /**
+     * Fills the store with products by generating random products for each category.
+     */
     public void fillStore (){
         RandomStorePopulator generator = new RandomStorePopulator();
         for (Category category: store.getCategoryList()) {
