@@ -7,11 +7,20 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
-
+/**
+ * Comparator class for sorting products based on a specified field and sorting order.
+ */
 public class StoreComparator implements Comparator<Product> {
     private final String fieldName;
     private final Sorting sortingOrder;
     private static final Logger LOGGER = Logger.getLogger(StoreComparator.class.getName());
+
+    /**
+     * Constructs a StoreComparator instance with the given field name and sorting order.
+     *
+     * @param fieldName    The name of the field to be used for comparison.
+     * @param sortingOrder The sorting order (ASC or DESC).
+     */
     public StoreComparator(String fieldName, Sorting sortingOrder) {
         this.fieldName = fieldName;
         this.sortingOrder = sortingOrder;

@@ -4,11 +4,14 @@ import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.domain.Product;
 import com.coherentsolutions.sorting.Sorting;
 import com.coherentsolutions.sorting.StoreComparator;
+import com.coherentsolutions.store.ClearPurchasedGoods;
+import com.coherentsolutions.store.CreateOrder;
 import com.coherentsolutions.store.Store;
 import com.coherentsolutions.store.StoreHelper;
 import com.coherentsolutions.xml.XMLParser;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class StoreApp {
     public static void main(String[] args) {
@@ -24,6 +27,19 @@ public class StoreApp {
     for (Category category : onlineStore.getCategoryList()) {
         products.addAll(category.getProductList());
     }
+        // Create a thread-safe collection to store purchased goods
+        ConcurrentLinkedQueue<Product> purchasedGoods = new ConcurrentLinkedQueue<>();
+
+        // Create a thread pool for order processing
+        int numProcessors = Runtime.getRuntime().availableProcessors();
+        ExecutorService orderProcessingThreadPool = Executors.newFixedThreadPool(numProcessors);
+
+        // Create a scheduled executor service for cleaning up purchased goods
+        ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
+
+        // Schedule the ClearPurchasedGoodsTask to run periodically (every 2 minutes)
+        cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods), 0, 2, TimeUnit.MINUTES);
+
 
     while (true) {
         // Display menu options
@@ -42,6 +58,9 @@ public class StoreApp {
                 displayTopNMostExpensiveItems(products, 5);
                 break;
             case 3:
+                // Shutdown the thread pool and cleanup scheduler before exiting
+                orderProcessingThreadPool.shutdown();
+                cleanupScheduler.shutdown();
                 System.out.println("Goodbye!");
                 return;
             default:
@@ -125,5 +144,11 @@ public class StoreApp {
         Collections.sort(sortedProducts, storeComparator);
 
         return sortedProducts;
+    }
+
+    private static void processOrder(Product product, ConcurrentLinkedQueue<Product> purchasedGoods, ExecutorService threadPool) {
+        // Create and submit a CreateOrderTask to the thread pool
+        Runnable orderTask = new CreateOrder(product, purchasedGoods);
+        threadPool.submit(orderTask);
     }
 }
