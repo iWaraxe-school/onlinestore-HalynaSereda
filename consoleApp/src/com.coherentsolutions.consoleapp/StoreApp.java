@@ -29,6 +29,9 @@ public class StoreApp {
         // Create a thread-safe collection to store purchased goods
         ConcurrentLinkedQueue<Product> purchasedGoods = new ConcurrentLinkedQueue<>();
 
+        // Specify the maximum number of items to retain in the purchased goods collection
+        int maxItemsToRetain = 100; // You can adjust this value as needed
+
         // Create a thread pool for order processing
         int numProcessors = Runtime.getRuntime().availableProcessors();
         ExecutorService orderProcessingThreadPool = Executors.newFixedThreadPool(numProcessors);
@@ -37,10 +40,11 @@ public class StoreApp {
         ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
 
         // Schedule the ClearPurchasedGoodsTask to run periodically (every 2 minutes)
-        cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods), 0, 2, TimeUnit.MINUTES);
+        cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods, maxItemsToRetain), 0, 2, TimeUnit.MINUTES);
         // Graceful shutdown mechanism
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.info("Shutting down the application...");
+            logger.info("Shutting down the application...");1
+
 
             // Shut down the thread pools
             orderProcessingThreadPool.shutdown();
