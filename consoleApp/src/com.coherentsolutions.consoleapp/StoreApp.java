@@ -9,11 +9,14 @@ import com.coherentsolutions.store.CreateOrder;
 import com.coherentsolutions.store.Store;
 import com.coherentsolutions.store.StoreHelper;
 import com.coherentsolutions.xml.XMLParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 public class StoreApp {
+    private static final Logger logger = LoggerFactory.getLogger(StoreApp.class);
     public static void main(String[] args) {
 
     Scanner scanner = new Scanner(System.in); // Create a Scanner for user input
@@ -39,6 +42,30 @@ public class StoreApp {
 
         // Schedule the ClearPurchasedGoodsTask to run periodically (every 2 minutes)
         cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods), 0, 2, TimeUnit.MINUTES);
+        // Graceful shutdown mechanism
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logger.info("Shutting down the application...");
+
+            // Shut down the thread pools
+            orderProcessingThreadPool.shutdown();
+            cleanupScheduler.shutdown();
+
+            try {
+                // Wait for thread pools to terminate gracefully
+                if (!orderProcessingThreadPool.awaitTermination(10, TimeUnit.SECONDS)) {
+                    logger.warn("Order processing thread pool did not terminate gracefully. Forcing shutdown.");
+                    orderProcessingThreadPool.shutdownNow();
+                }
+                if (!cleanupScheduler.awaitTermination(10, TimeUnit.SECONDS)) {
+                    logger.warn("Cleanup scheduler did not terminate gracefully. Forcing shutdown.");
+                    cleanupScheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                logger.error("Application shutdown process interrupted.", e);
+            }
+
+            logger.info("Application shutdown complete.");
+        }));
 
 
     while (true) {
