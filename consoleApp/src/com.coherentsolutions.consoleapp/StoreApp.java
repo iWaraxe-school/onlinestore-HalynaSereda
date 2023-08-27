@@ -43,7 +43,7 @@ public class StoreApp {
         cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods, maxItemsToRetain), 0, 2, TimeUnit.MINUTES);
         // Graceful shutdown mechanism
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.info("Shutting down the application...");1
+            logger.info("Shutting down the application...");
 
 
             // Shut down the thread pools
