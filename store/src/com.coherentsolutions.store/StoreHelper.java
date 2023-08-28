@@ -7,28 +7,20 @@ import org.reflections.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
-
+import java.util.logging.Logger;
 /**
  * Helper class for populating the store with categories and products.
  */
-public class StoreHelper  {
+public class StoreHelper {
     private final Store store;
+    private static final Logger logger = Logger.getLogger(StoreHelper.class.getName());
 
-    /**
-     * Constructs a StoreHelper instance with the provided store.
-     *
-     * @param store The store to populate with categories and products.
-     */
-    public StoreHelper (Store store) {
+    public StoreHelper(Store store) {
         this.store = store;
         createCategories();
     }
 
-
-    /**
-     * Creates and adds categories to the store by using reflection.
-     */
-    private void createCategories() {
+    private synchronized void createCategories() {
         Reflections reflections = new Reflections("com.coherentsolutions.domain.categories");
         Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);
 
@@ -36,18 +28,17 @@ public class StoreHelper  {
             try {
                 Constructor<? extends Category> constructor = subType.getDeclaredConstructor();
                 if (!constructor.canAccess(null)) {
-                    System.out.printf("Cannot access constructor of %s, it might be private%n", subType.getSimpleName());
+                    logger.warning("Cannot access constructor of " + subType.getSimpleName() + ". It might be private.");
                     continue;
                 }
 
                 Category category = constructor.newInstance();
                 store.addCategoryToList(category);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
+                logger.severe("Error creating category: " + e.getMessage());
             }
         }
     }
-
 
     /**
      * Fills the store with products by generating random products for each category.
