@@ -3,21 +3,9 @@ package com.coherentsolutions.domain;
 
 public class Product {
 
-    private String name;
-    private double rate;
-    private double price;
-
-    /**
-     * Constructs a new Product with the specified name, rate, and price.
-     * @param name The name of the product.
-     * @param rate The rate or rating of the product.
-     * @param price The price of the product.
-     */
-    public Product(String name, double rate, double price) {
-        this.name = name;
-        this.rate = rate;
-        this.price = price;
-    }
+    private final String  name;
+    private final double rate;
+    private final double price;
 
     /**
      * Constructs a new Product using the provided ProductBuilder.
