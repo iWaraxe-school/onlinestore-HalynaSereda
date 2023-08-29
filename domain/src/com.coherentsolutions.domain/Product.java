@@ -51,6 +51,7 @@ public class Product {
         return String.format("Name: '%s', Price: '%s', Rate: '%s'", name, price, rate);
     }
 
+
     /**
      * Builder class for constructing Product objects.
      */

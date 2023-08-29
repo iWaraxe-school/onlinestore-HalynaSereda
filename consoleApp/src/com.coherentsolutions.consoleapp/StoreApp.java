@@ -8,17 +8,21 @@ import com.coherentsolutions.xml.XMLParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class StoreApp {
     private static final Logger logger = LoggerFactory.getLogger(StoreApp.class);
+
     public static void main(String[] args) {
 
-    Scanner scanner = new Scanner(System.in); // Create a Scanner for user input
-    Store onlineStore = Store.getInstance();
-    StoreHelper storeHelper = new StoreHelper(onlineStore);
-    storeHelper.fillStore();
+        Scanner scanner = new Scanner(System.in); // Create a Scanner for user input
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            Store onlineStore = Store.getInstance();  // Create Store instance here
+            StoreHelper storeHelper = new StoreHelper(onlineStore);  // Pass the Store instance
+            storeHelper.fillStore();
 
     Map<String, Sorting> sortingMap = XMLParser.getSortInOrder();
 
@@ -99,7 +103,14 @@ public class StoreApp {
             // Handle unexpected exceptions gracefully
             System.out.println("An unexpected error occurred: " + e.getMessage());
         }}
-}
+ }
+           catch (SQLException e) {
+               logger.error("Error establishing database connection: " + e.getMessage());
+           } finally {
+               logger.info("Goodbye!");
+            }
+
+    }
 
     private static int getIntInput(Scanner scanner) {
         int choice = -1; // Default value to indicate an invalid choice
