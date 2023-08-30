@@ -1,6 +1,7 @@
 package com.coherentsolutions.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 public class Category {
 
@@ -28,15 +29,15 @@ public class Category {
      * Gets the list of products in the category.
      * @return The list of products in the category.
      */
-    public List<Product> getProductList() {
-        return productList;
+    public synchronized List<Product> getProductList() {
+        return Collections.unmodifiableList(productList);
     }
 
     /**
      * Adds a product to the category's product list.
      * @param product The product to be added.
      */
-    public void addProductToCategory(Product product) {
+    public synchronized void  addProductToCategory(Product product) {
         productList.add(product);
     }
 

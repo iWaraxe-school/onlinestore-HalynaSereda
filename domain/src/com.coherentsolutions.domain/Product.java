@@ -3,21 +3,9 @@ package com.coherentsolutions.domain;
 
 public class Product {
 
-    private String name;
-    private double rate;
-    private double price;
-
-    /**
-     * Constructs a new Product with the specified name, rate, and price.
-     * @param name The name of the product.
-     * @param rate The rate or rating of the product.
-     * @param price The price of the product.
-     */
-    public Product(String name, double rate, double price) {
-        this.name = name;
-        this.rate = rate;
-        this.price = price;
-    }
+    private final String  name;
+    private final double rate;
+    private final double price;
 
     /**
      * Constructs a new Product using the provided ProductBuilder.
@@ -63,6 +51,7 @@ public class Product {
         return String.format("Name: '%s', Price: '%s', Rate: '%s'", name, price, rate);
     }
 
+
     /**
      * Builder class for constructing Product objects.
      */
@@ -73,39 +62,66 @@ public class Product {
 
         /**
          * Sets the name of the product.
+         *
          * @param name The name of the product.
          * @return The ProductBuilder instance.
+         * @throws IllegalArgumentException if the name is null or empty.
          */
         public ProductBuilder withName(String name) {
+            if (name == null || name.isEmpty()) {
+                throw new IllegalArgumentException("Product name cannot be null or empty");
+            }
             this.name = name;
             return this;
         }
 
         /**
          * Sets the price of the product.
+         *
          * @param price The price of the product.
          * @return The ProductBuilder instance.
+         * @throws IllegalArgumentException if the price is negative.
          */
         public ProductBuilder withPrice(double price) {
+            if (price < 0) {
+                throw new IllegalArgumentException("Product price cannot be negative");
+            }
             this.price = price;
             return this;
         }
 
         /**
          * Sets the rate of the product.
+         *
          * @param rate The rate of the product.
          * @return The ProductBuilder instance.
+         * @throws IllegalArgumentException if the rate is not between 0 and 5.
          */
         public ProductBuilder withRate(double rate) {
+            if (rate < 0 || rate > 5) {
+                throw new IllegalArgumentException("Product rate must be between 0 and 5");
+            }
             this.rate = rate;
             return this;
         }
 
         /**
-         * Constructs a new Product using the configured ProductBuilder.
-         * @return The constructed Product.
+         * Constructs a new Product instance with the provided attributes.
+         *
+         * @return The constructed Product instance.
+         * @throws IllegalStateException if essential attributes (e.g., name) are not properly set.
          */
         public Product build() {
+            if (name == null) {
+                throw new IllegalStateException("Product name must be set");
+            }
+            if (price < 0) {
+                throw new IllegalStateException("Product price must be set");
+            }
+            if (rate < 0 || rate > 5) {
+                throw new IllegalStateException("Product rate must be between 0 and 5");
+            }
+
             return new Product(this);
         }
     }
