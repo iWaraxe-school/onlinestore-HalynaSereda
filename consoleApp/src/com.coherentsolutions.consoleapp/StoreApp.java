@@ -22,7 +22,13 @@ public class StoreApp {
         try (Connection connection = DatabaseConnection.getConnection()) {
             Store onlineStore = Store.getInstance();
             StoreHelper storeHelper = new StoreHelper(onlineStore);
+
+            // Create the ProductDAO instance here
+            ProductDAO productDAO = new ProductDAO(connection);
+            CategoryDAO categoryDAO = new CategoryDAO(connection);
+
             storeHelper.fillStore();
+
 
             Map<String, Sorting> sortingMap = XMLParser.getSortInOrder();
 
@@ -85,10 +91,10 @@ public class StoreApp {
 
                     switch (choice) {
                         case 1:
-                            performSorting(scanner, products, sortingMap);
+                            performSorting(scanner, products, sortingMap, productDAO);
                             break;
                         case 2:
-                            displayTopNMostExpensiveItems(products, 5);
+                            displayTopNMostExpensiveItems(products, 5, productDAO);
                             break;
                         case 3:
                             // Shutdown the thread pool and cleanup scheduler before exiting
@@ -128,7 +134,7 @@ public class StoreApp {
         return choice;
     }
 
-    private static void performSorting(Scanner scanner, List<Product> products, Map<String, Sorting> sortingMap) {
+    private static void performSorting(Scanner scanner, List<Product> products, Map<String, Sorting> sortingMap, ProductDAO productDAO) throws SQLException {
         // Ask the user to choose a field for sorting
         System.out.println("Choose a field for sorting:");
         for (String fieldName : sortingMap.keySet()) {
@@ -148,12 +154,19 @@ public class StoreApp {
         // Use the common method to sort and display products
         List<Product> sortedProducts = ProductSorter.sortProducts(products, chosenField, sortingOrder);
         displayProducts(sortedProducts);
+        for (Product product : sortedProducts) {
+            productDAO.insertProduct(product);
+        }
     }
-    private static void displayTopNMostExpensiveItems(List<Product> products, int topN) {
+    private static void displayTopNMostExpensiveItems(List<Product> products, int topN, ProductDAO productDAO) throws SQLException {
         List<Product> topItems = ProductSorter.getTopNItems(products, topN);
 
         System.out.println("Top " + topN + " most expensive items:");
         displayProducts(topItems);
+        // Loop through the top items and insert them into the database
+        for (Product product : topItems) {
+            productDAO.insertProduct(product);
+        }
     }
 
     private static void displayProducts(List<Product> products) {
