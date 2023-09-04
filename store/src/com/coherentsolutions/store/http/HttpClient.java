@@ -1,54 +1,67 @@
 package com.coherentsolutions.store.http;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpClient {
-    public static void main(String[] args) {
-        OnlineStoreHttpServer httpServer = new OnlineStoreHttpServer();
-        try {
-            httpServer.startServer(8080);
-            System.out.println("HTTP Server started on port 8080.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            // Create a URL for your server's endpoint
-            URL url = new URL("http://localhost:8080/add-to-cart");
 
-            // Open a connection to the URL
+    public static void main(String[] args) {
+        // Server URL and endpoint
+        String serverUrl = "https://localhost:8080";
+        String endpoint = "/add-to-cart";
+
+        try {
+            // Create a URL object with the server URL and endpoint
+            URL url = new URL(serverUrl + endpoint);
+
+            // Open a connection to the server
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             // Set the request method to POST
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
 
-            // Enable input/output streams
+            // Enable input and output streams
+            connection.setDoInput(true);
             connection.setDoOutput(true);
 
-            // Define the JSON request body
-            String requestBody = "{\"name\":\"Product Name\",\"price\":19.99,\"rate\":4.5}";
+            // Set the request headers (content type and any others required)
+            connection.setRequestProperty("Content-Type", "application/json");
 
-            // Write the JSON data to the request body
+            // Construct the JSON request body
+            String jsonRequestBody = "{\"name\":\"Product Name\",\"price\":19.99,\"rate\":4.5}";
+
+            // Write the JSON request body to the output stream
             try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = requestBody.getBytes("utf-8");
+                byte[] input = jsonRequestBody.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
 
-            // Get the HTTP response code
+            // Get the response code from the server
             int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
 
-            // Check if the response code is 200 (OK)
-            if (responseCode == 200) {
-                System.out.println("Product added to cart successfully.");
+            // Read and process the server's response
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    String line;
+                    StringBuilder response = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    System.out.println("Server Response: " + response.toString());
+                }
             } else {
-                System.out.println("Failed to add product to cart. Response code: " + responseCode);
+                System.err.println("Error: HTTP request failed");
             }
 
             // Close the connection
             connection.disconnect();
-        } catch (Exception e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

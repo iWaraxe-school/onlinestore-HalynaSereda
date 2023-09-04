@@ -9,13 +9,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
-
 public class OnlineStoreHttpServer {
-    public void startServer(int port)  throws IOException, Exception {
-        Cart cart = new Cart();
+    public void startServer(int port) throws IOException, Exception {
+        String keystorePath = "C:\\Users\\HalynaSereda/keystore.jks";
+        String keystorePassword = "2013000";
+
+
         // Create an HTTPS context with your keystore
-        HttpsServer httpsServer = HttpsServer.create(new InetSocketAddress(8080), 0);
-        SSLContext sslContext = createSSLContext("yourKeystorePath", "yourKeystorePassword");
+        HttpsServer httpsServer = HttpsServer.create(new InetSocketAddress(port), 0);
+        SSLContext sslContext = createSSLContext(keystorePath, keystorePassword);
         httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
             public void configure(HttpsParameters params) {
                 try {
@@ -36,12 +38,13 @@ public class OnlineStoreHttpServer {
         });
 
         // Register handlers for different paths
-        httpsServer.createContext("/add-to-cart", new AddToCartHandler(cart, "MyRealm","2013000" ));
+        Cart cart = new Cart();
+        httpsServer.createContext("/add-to-cart", new AddToCartHandler(cart));
         httpsServer.start();
     }
 
     private SSLContext createSSLContext(String keystorePath, String keystorePassword) throws Exception {
-        // Load your keystore
+        // Load keystore
         KeyStore keyStore = KeyStore.getInstance("JKS");
         FileInputStream keyStoreFile = new FileInputStream(keystorePath);
         keyStore.load(keyStoreFile, keystorePassword.toCharArray());
@@ -59,7 +62,5 @@ public class OnlineStoreHttpServer {
         sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
 
         return sslContext;
-
     }
-
 }

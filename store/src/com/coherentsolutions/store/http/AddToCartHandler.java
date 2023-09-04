@@ -10,16 +10,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+
 public class AddToCartHandler implements HttpHandler {
 
     private Cart cart;
-    private String username; // Your hardcoded username
-    private String password; // Your hardcoded password
 
-    public AddToCartHandler(Cart cart, String username, String password) {
+    public AddToCartHandler(Cart cart) {
         this.cart = cart;
-        this.username = username;
-        this.password = password;
     }
 
     @Override
@@ -67,21 +64,24 @@ public class AddToCartHandler implements HttpHandler {
             String[] credentials = decodedCredentials.split(":", 2);
 
             // Check if the provided username and password match the hardcoded values
-            return credentials.length == 2 && credentials[0].equals(username) && credentials[1].equals(password);
+            return credentials.length == 2 && credentials[0].equals("yourUsername") && credentials[1].equals("yourPassword");
         }
 
         return false;
     }
-    private Product parseProductFromRequestBody(String requestBody) {  try {
-        // Create a Gson instance for JSON parsing
-        Gson gson = new Gson();
 
-        // Parse the request body into a Product object
-        Product product = gson.fromJson(requestBody, Product.class);
+    private Product parseProductFromRequestBody(String requestBody) {
+        try {
+            // Create a Gson instance for JSON parsing
+            Gson gson = new Gson();
 
-        return product;
-    } catch (JsonParseException e) {
-        // Handle parsing error (e.g., invalid JSON format)
-        throw new RuntimeException("Error parsing JSON request body: " + e.getMessage(), e);
+            // Parse the request body into a Product object
+            Product product = gson.fromJson(requestBody, Product.class);
+
+            return product;
+        } catch (JsonParseException e) {
+            // Handle parsing error (e.g., invalid JSON format)
+            throw new RuntimeException("Error parsing JSON request body: " + e.getMessage(), e);
+        }
     }
-}}
+}
