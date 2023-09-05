@@ -1,5 +1,6 @@
 package com.coherentsolutions.store;
 
+import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.domain.Product;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -21,6 +23,35 @@ public class RandomStorePopulator {
         this.connection = connection;
     }
 
+    public static void insertCategoryIntoDB(Category category, Connection connection) throws SQLException {
+        String categoryName = category.getName();
+
+        if (categoryExists(categoryName, connection)) {
+            // Category already exists, so just log a message and return
+            logger.info("Category '{}' already exists. Skipping insertion.", categoryName);
+            return;
+        }
+
+        // Category doesn't exist, proceed with insertion
+        String query = "INSERT INTO categories (name) VALUES (?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, categoryName);
+            preparedStatement.executeUpdate();
+            logger.info("Inserted category: {}", categoryName);
+        }
+    }
+
+    private static boolean categoryExists(String categoryName, Connection connection) throws SQLException {
+        String query = "SELECT COUNT(*) FROM categories WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, categoryName);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt(1);
+                return count > 0; // Return true if count is greater than 0 (category exists)
+            }
+        }
+    }
     /**
      * Generates a random product for the given category name and inserts it into the database.
      *
@@ -54,5 +85,5 @@ public class RandomStorePopulator {
             }
         } catch (SQLException e) {
             logger.error("Error storing product in the database: " + e.getMessage());
-        }
-    }}
+        }}
+          }

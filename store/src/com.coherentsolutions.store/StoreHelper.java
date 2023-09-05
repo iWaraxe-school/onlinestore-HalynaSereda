@@ -21,7 +21,7 @@ public class StoreHelper {
 
     public StoreHelper(Store store) {
         this.store = store;
-        createCategories();
+               createCategories();
     }
 
     private synchronized void createCategories() {
@@ -56,6 +56,7 @@ public class StoreHelper {
                     Product product = generator.generateProduct(category.getName());
                     category.addProductToCategory(product);
                     RandomStorePopulator.insertProductIntoDatabase(product, connection);
+                    RandomStorePopulator.insertCategoryIntoDB(category, connection);
                     logger.info("Added product: {} to category: {}", product.getName(), category.getName());
                 }
             }

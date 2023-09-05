@@ -20,96 +20,102 @@ public class StoreApp {
 
         Scanner scanner = new Scanner(System.in); // Create a Scanner for user input
         try (Connection connection = DatabaseConnection.getConnection()) {
-            Store onlineStore = Store.getInstance();  // Create Store instance here
-            StoreHelper storeHelper = new StoreHelper(onlineStore);  // Pass the Store instance
+            Store onlineStore = Store.getInstance();
+            StoreHelper storeHelper = new StoreHelper(onlineStore);
+
+            // Create the ProductDAO instance here
+            ProductDAO productDAO = new ProductDAO(connection);
+            CategoryDAO categoryDAO = new CategoryDAO(connection);
+
             storeHelper.fillStore();
 
-    Map<String, Sorting> sortingMap = XMLParser.getSortInOrder();
 
-    List<Product> products = new ArrayList<>();
-    for (Category category : onlineStore.getCategoryList()) {
-        products.addAll(category.getProductList());
-    }
-        // Create a thread-safe collection to store purchased goods
-        ConcurrentLinkedQueue<Product> purchasedGoods = new ConcurrentLinkedQueue<>();
+            Map<String, Sorting> sortingMap = XMLParser.getSortInOrder();
 
-        // Specify the maximum number of items to retain in the purchased goods collection
-        int maxItemsToRetain = 100; // You can adjust this value as needed
-
-        // Create a thread pool for order processing
-        int numProcessors = Runtime.getRuntime().availableProcessors();
-        ExecutorService orderProcessingThreadPool = Executors.newFixedThreadPool(numProcessors);
-
-        // Create a scheduled executor service for cleaning up purchased goods
-        ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
-
-        // Schedule the ClearPurchasedGoodsTask to run periodically (every 2 minutes)
-        cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods, maxItemsToRetain), 0, 2, TimeUnit.MINUTES);
-        // Graceful shutdown mechanism
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.info("Shutting down the application...");
-
-
-            // Shut down the thread pools
-            orderProcessingThreadPool.shutdown();
-            cleanupScheduler.shutdown();
-
-            try {
-                // Wait for thread pools to terminate gracefully
-                if (!orderProcessingThreadPool.awaitTermination(10, TimeUnit.SECONDS)) {
-                    logger.warn("Order processing thread pool did not terminate gracefully. Forcing shutdown.");
-                    orderProcessingThreadPool.shutdownNow();
-                }
-                if (!cleanupScheduler.awaitTermination(10, TimeUnit.SECONDS)) {
-                    logger.warn("Cleanup scheduler did not terminate gracefully. Forcing shutdown.");
-                    cleanupScheduler.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                logger.error("Application shutdown process interrupted.", e);
+            List<Product> products = new ArrayList<>();
+            for (Category category : onlineStore.getCategoryList()) {
+                products.addAll(category.getProductList());
             }
+            // Create a thread-safe collection to store purchased goods
+            ConcurrentLinkedQueue<Product> purchasedGoods = new ConcurrentLinkedQueue<>();
 
-            logger.info("Application shutdown complete.");
-        }));
+            // Specify the maximum number of items to retain in the purchased goods collection
+            int maxItemsToRetain = 100; // You can adjust this value as needed
+
+            // Create a thread pool for order processing
+            int numProcessors = Runtime.getRuntime().availableProcessors();
+            ExecutorService orderProcessingThreadPool = Executors.newFixedThreadPool(numProcessors);
+
+            // Create a scheduled executor service for cleaning up purchased goods
+            ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
+
+            // Schedule the ClearPurchasedGoodsTask to run periodically (every 2 minutes)
+            cleanupScheduler.scheduleAtFixedRate(new ClearPurchasedGoods(purchasedGoods, maxItemsToRetain), 0, 2, TimeUnit.MINUTES);
+            // Graceful shutdown mechanism
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                logger.info("Shutting down the application...");
 
 
-    while (true) {
-        // Display menu options
-        System.out.println("Select an option:");
-        System.out.println("1. Sort products");
-        System.out.println("2. Show top 5 most expensive items");
-        System.out.println("3. Exit");
-
-        int choice = getIntInput(scanner);
-
-        try {
-
-        switch (choice) {
-            case 1:
-                performSorting(scanner, products, sortingMap);
-                break;
-            case 2:
-                displayTopNMostExpensiveItems(products, 5);
-                break;
-            case 3:
-                // Shutdown the thread pool and cleanup scheduler before exiting
+                // Shut down the thread pools
                 orderProcessingThreadPool.shutdown();
                 cleanupScheduler.shutdown();
-                System.out.println("Goodbye!");
-                return;
-            default:
-                System.out.println("Invalid choice. Please select a valid option.");
-        }
-    } catch (Exception e) {
-            // Handle unexpected exceptions gracefully
-            System.out.println("An unexpected error occurred: " + e.getMessage());
-        }}
- }
-           catch (SQLException e) {
-               logger.error("Error establishing database connection: " + e.getMessage());
-           } finally {
-               logger.info("Goodbye!");
-            }
 
+                try {
+                    // Wait for thread pools to terminate gracefully
+                    if (!orderProcessingThreadPool.awaitTermination(10, TimeUnit.SECONDS)) {
+                        logger.warn("Order processing thread pool did not terminate gracefully. Forcing shutdown.");
+                        orderProcessingThreadPool.shutdownNow();
+                    }
+                    if (!cleanupScheduler.awaitTermination(10, TimeUnit.SECONDS)) {
+                        logger.warn("Cleanup scheduler did not terminate gracefully. Forcing shutdown.");
+                        cleanupScheduler.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    logger.error("Application shutdown process interrupted.", e);
+                }
+
+                logger.info("Application shutdown complete.");
+            }));
+
+
+            while (true) {
+                // Display menu options
+                System.out.println("Select an option:");
+                System.out.println("1. Sort products");
+                System.out.println("2. Show top 5 most expensive items");
+                System.out.println("3. Exit");
+
+                int choice = getIntInput(scanner);
+
+                try {
+
+                    switch (choice) {
+                        case 1:
+                            performSorting(scanner, products, sortingMap, productDAO);
+                            break;
+                        case 2:
+                            displayTopNMostExpensiveItems(products, 5, productDAO);
+                            break;
+                        case 3:
+                            // Shutdown the thread pool and cleanup scheduler before exiting
+                            orderProcessingThreadPool.shutdown();
+                            cleanupScheduler.shutdown();
+                            System.out.println("Goodbye!");
+                            return;
+                        default:
+                            System.out.println("Invalid choice. Please select a valid option.");
+                    }
+                } catch (Exception e) {
+                    // Handle unexpected exceptions gracefully
+                    System.out.println("An unexpected error occurred: " + e.getMessage());
+                }}
+        }      catch (SQLException e) {
+            logger.error("Error establishing database connection: " + e.getMessage());
+        } finally {
+            // Close the data source when the application is shutting down
+            DatabaseConnection.closeDataSource();
+            logger.info("Goodbye!");
+        }
     }
 
     private static int getIntInput(Scanner scanner) {
@@ -128,7 +134,7 @@ public class StoreApp {
         return choice;
     }
 
-    private static void performSorting(Scanner scanner, List<Product> products, Map<String, Sorting> sortingMap) {
+    private static void performSorting(Scanner scanner, List<Product> products, Map<String, Sorting> sortingMap, ProductDAO productDAO) throws SQLException {
         // Ask the user to choose a field for sorting
         System.out.println("Choose a field for sorting:");
         for (String fieldName : sortingMap.keySet()) {
@@ -148,12 +154,19 @@ public class StoreApp {
         // Use the common method to sort and display products
         List<Product> sortedProducts = ProductSorter.sortProducts(products, chosenField, sortingOrder);
         displayProducts(sortedProducts);
+        for (Product product : sortedProducts) {
+            productDAO.insertProduct(product);
+        }
     }
-    private static void displayTopNMostExpensiveItems(List<Product> products, int topN) {
+    private static void displayTopNMostExpensiveItems(List<Product> products, int topN, ProductDAO productDAO) throws SQLException {
         List<Product> topItems = ProductSorter.getTopNItems(products, topN);
 
         System.out.println("Top " + topN + " most expensive items:");
         displayProducts(topItems);
+        // Loop through the top items and insert them into the database
+        for (Product product : topItems) {
+            productDAO.insertProduct(product);
+        }
     }
 
     private static void displayProducts(List<Product> products) {
